@@ -165,6 +165,9 @@ def drawSierpinskiTriangle(
 def render(time: float):
     glClear(GL_COLOR_BUFFER_BIT)
 
+    # drawTriangle((-90.0, -80.0), (90.0, -80.0), (0.0, 76.0))
+    # drawRectangle(0, 0, 100, 50)
+    # drawRectangle(0, 0, 100, 50, True, .1)
     # drawCarpet(0, 0, 200, 200, 5)
     drawSierpinskiTriangle((-90.0, -80.0), (90.0, -80.0), (0.0, 76.0), 5)
 
