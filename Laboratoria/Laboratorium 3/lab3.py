@@ -20,10 +20,12 @@ from OpenGL.GL import (
     GL_COLOR_BUFFER_BIT,
     GL_DEPTH_BUFFER_BIT,
     GL_DEPTH_TEST,
+    GL_FLAT,
     GL_LINES,
     GL_MODELVIEW,
     GL_POINTS,
     GL_PROJECTION,
+    GL_SMOOTH,
     GL_TRIANGLE_STRIP,
     GL_TRIANGLES,
     glBegin,
@@ -37,6 +39,7 @@ from OpenGL.GL import (
     glMatrixMode,
     glOrtho,
     glRotatef,
+    glShadeModel,
     glVertex,
     glVertex3f,
     glViewport,
@@ -58,6 +61,7 @@ def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.0, 0.0, 0.0, 1.0)
     glEnable(GL_DEPTH_TEST)
+    glShadeModel(GL_SMOOTH) 
 
     buildMountain()
 
@@ -200,6 +204,65 @@ def drawMountain() -> None:
         glEnd()
 
 
+def drawEggPoints() -> None:
+    glBegin(GL_POINTS)
+
+    for i in range(N):
+        for j in range(N):
+            glVertex3f(*tab[i][j])
+
+    glEnd()
+
+
+def drawEggLines() -> None:
+    glBegin(GL_LINES)
+
+    for i in range(N - 1):
+        for j in range(N - 1):
+            glVertex3f(*tab[i][j])
+            glVertex3f(*tab[i + 1][j])
+
+            glVertex3f(*tab[i][j])
+            glVertex3f(*tab[i][j + 1])
+
+    glEnd()
+
+
+def drawEggTriangles() -> None:
+    glBegin(GL_TRIANGLES)
+
+    for i in range(N - 1):
+        for j in range(N - 1):
+            glColor3f(*colors[i][j])
+            glVertex3f(*tab[i][j])
+            glColor3f(*colors[i + 1][j])
+            glVertex3f(*tab[i + 1][j])
+            glColor3f(*colors[i][j + 1])
+            glVertex3f(*tab[i][j + 1])
+
+            glColor3f(*colors[i + 1][j + 1])
+            glVertex3f(*tab[i + 1][j + 1])
+            glColor3f(*colors[i + 1][j])
+            glVertex3f(*tab[i + 1][j])
+            glColor3f(*colors[i][j + 1])
+            glVertex3f(*tab[i][j + 1])
+
+    glEnd()
+
+
+def drawEggStrip() -> None:
+    for i in range(N - 1):
+        glBegin(GL_TRIANGLE_STRIP)
+        for j in range(N):
+            glColor3f(*colors[i][j])
+            glVertex3f(*tab[i][j])
+
+            glColor3f(*colors[i + 1][j])
+            glVertex3f(*tab[i + 1][j])
+
+        glEnd()
+
+
 def render(time: float):
     glClear(
         GL_COLOR_BUFFER_BIT
@@ -211,26 +274,12 @@ def render(time: float):
 
     axes()
 
+    # drawEggPoints()
+    # drawEggLines()
+    # drawEggTriangles()
+    # drawEggStrip()
+
     drawMountain()
-
-    # glBegin(GL_POINTS)
-
-    # for i in range(N):
-    #     for j in range(N):
-    #         glVertex3f(*tab[i][j])
-    #
-    # glEnd()
-    #
-    # for i in range(N - 1):
-    #     glBegin(GL_TRIANGLE_STRIP)
-    #     for j in range(N):
-    #         glColor3f(*colors[i][j])
-    #         glVertex3f(*tab[i][j])
-    #
-    #         glColor3f(*colors[i + 1][j])
-    #         glVertex3f(*tab[i + 1][j])
-    #
-    #     glEnd()
 
     glFlush()
 
